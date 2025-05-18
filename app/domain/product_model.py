@@ -17,10 +17,10 @@ class ProductDB(Base):
 
 # Enum for category validation
 class ProductCategory(str, Enum):
-    LANCHE = "Lanche"
-    ACOMPANHAMENTO = "Acompanhamento"
-    BEBIDA = "Bebida"
-    SOBREMESA = "Sobremesa"
+    SANDWICH = "Lanche"
+    SIDE_DISH = "Acompanhamento"
+    DRINK = "Bebida"
+    DESSERT = "Sobremesa"
 
 # Pydantic model for API requests
 class ProductCreate(BaseModel):

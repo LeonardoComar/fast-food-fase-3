@@ -16,3 +16,13 @@ CREATE TABLE IF NOT EXISTS clients (
     cpf VARCHAR(14) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Create orders table
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    client_id INT NOT NULL,
+    total_price FLOAT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    products JSON NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
