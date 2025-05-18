@@ -1,0 +1,33 @@
+{
+	"info": {
+		"_postman_id": "cc2422aa-aa1e-44b6-b02e-ac97ee7ea3a8",
+		"name": "Fast Food fase 3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39997933"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": []
+		},
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:{{port}}/api/health_check",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"health_check"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
