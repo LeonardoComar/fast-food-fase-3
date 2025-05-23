@@ -1,18 +1,24 @@
 # fast-food-fase-3
 
 # Pendências:
-- Criar a aplicação usando k8s
-- Configurar o AWS Academy localmente
-- criar recursos no AWS Academy usando o Terraform, em um projeto distinto
-- Fazer deploy da aplicação, aplicando o EKS no AWS Academy e vendo funcionar a aplicação
-- Adaptar o código para criação e conexão com o banco de de dados gerenciavel
--
+- Criar a imagem da minha aplicação no docker hub
+- criar recursos no AWS Academy usando o Terraform
+    - RDS
+    - EKS
+    - API Gateway
+    - Lambda 
+    - Cognito
+
+- Adaptar o código para conexão com o banco de dados gerenciavel
 - Fazer a conexão com Cognito para receber o token de acesso e configurar uma labda simples
-- 
+- Atualizar Postman para rodar as requisições do AWS
+- Criar CI/CD da aplicação
 
-Comandos:
-
-Docker:
+# Comandos:
+## Docker:
 docker-compose build
 docker-compose up -d
 docker-compose down -v
+
+## Testes
+pytest --cov=app app/tests/
