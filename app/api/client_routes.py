@@ -57,7 +57,9 @@ async def create_client(client: ClientCreate, db: Session = Depends(get_db)):
         )
 
 @router.put("/{client_id}", response_model=ClientResponse)
-async def update_client(client_id: int, client: ClientUpdate, db: Session = Depends(get_db)):
+async def update_client(client_id: int, 
+                        client: ClientUpdate, 
+                        db: Session = Depends(get_db)):
     """
     Update an existing client's name
     """

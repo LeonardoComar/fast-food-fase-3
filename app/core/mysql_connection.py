@@ -15,12 +15,11 @@ def get_connection_url() -> str:
     """
     Build database connection URL from environment variables or default values.
     """
-    # Get values from environment or use defaults from docker setup
-    db_user = os.getenv("DB_USER", "fastfood_user")
-    db_password = os.getenv("DB_PASSWORD", "Mudar123!")
-    db_host = os.getenv("DB_HOST", "db-fastfood")
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD") 
+    db_host = os.getenv("DB_HOST")
     db_port = os.getenv("DB_PORT", "3306")
-    db_name = os.getenv("DB_NAME", "fastfood")
+    db_name = os.getenv("DB_NAME", "db_fastfood")
     
     # Build MySQL connection URL
     return f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -35,6 +34,9 @@ def get_engine() -> Engine:
         echo=os.getenv("SQL_ECHO", "False").lower() == "true",
         pool_pre_ping=True,
         pool_recycle=3600,
+        pool_timeout=30,  # Connection timeout in seconds
+        pool_size=5,      # Adjust based on your workload
+        max_overflow=10   # Additional connections when pool is full
     )
 
 # Create a session factory

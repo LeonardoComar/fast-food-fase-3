@@ -1,9 +1,10 @@
 # fast-food-fase-3
 
 # Pendências:
-- Criar a imagem da minha aplicação no docker hub
+- Criar a imagem da minha aplicação no ECR
 - criar recursos no AWS Academy usando o Terraform
     - RDS
+    - ECR
     - EKS
     - API Gateway
     - Lambda 

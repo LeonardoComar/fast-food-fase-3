@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from pydantic import BaseModel
+from typing import List
 
 from app.core.mysql_connection import Base
 

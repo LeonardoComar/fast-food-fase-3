@@ -64,7 +64,7 @@ class TestOrderRoutes:
         mock_service.get_orders_by_status.return_value = order_list
         
         # Act
-        response = client.get(f"/api/orders/?status={OrderStatus.RECEIVED}")
+        response = client.get(f"/api/orders/?status={OrderStatus.RECEIVED.value}")
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
