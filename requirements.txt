@@ -18,3 +18,6 @@ pytest-mock==3.14.0
 httpx==0.28.1
 moto[s3]==5.0.6
 cryptography==44.0.0
+python-dotenv==1.1.0
+pymysql==1.1.1
+flake8==7.2.0
