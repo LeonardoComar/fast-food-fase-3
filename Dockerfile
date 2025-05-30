@@ -7,9 +7,6 @@ ENV PYTHONUNBUFFERED=1
 # Diretório de trabalho
 WORKDIR /app
 
-# Instalar dependências do sistema
-RUN apt-get update && apt-get install -y 
-
 # Copiar e instalar dependências do Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
