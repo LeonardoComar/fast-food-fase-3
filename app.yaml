@@ -18,12 +18,16 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: "root123456"
             - name: DB_USER
               value: "root"
+            - name: DB_PASSWORD
+              value: "root123456"
             - name: DB_HOST
               value: "mydbinstance.chi8akyshzbu.us-east-1.rds.amazonaws.com"
             - name: DB_PORT
               value: "3306"
+            - name: DB_NAME
+              value: "db_fastfood"
+            - name: SQL_ECHO
+              value: "false"
 

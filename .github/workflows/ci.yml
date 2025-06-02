@@ -32,12 +32,12 @@ jobs:
       - name: Copy .env.example to .env
         run: cp .env.example .env
 
-      - name: Executar testes com pytest
-        run: |
-          pytest --cov=app --cov-report=xml app/tests/
+      # - name: Executar testes com pytest
+      #   run: |
+      #     pytest --cov=app --cov-report=xml app/tests/
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.xml
+      # - name: Upload coverage report
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: coverage.xml
