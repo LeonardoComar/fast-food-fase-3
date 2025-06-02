@@ -160,7 +160,3 @@ def create_tables():
     finally:
         if 'engine' in locals():
             engine.dispose()
-
-
-if __name__ == "__main__":
-    create_db_tables()
