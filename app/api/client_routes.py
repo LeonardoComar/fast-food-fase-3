@@ -76,3 +76,22 @@ async def update_client(client_id: int,
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
         )
+
+@router.get("/filter", response_model=ClientResponse)
+async def get_client_by_cpf(cpf: str, db: Session = Depends(get_db)):
+    """
+    Get a client by CPF
+    """
+    try:
+        service = ClientService(db)
+        return service.get_client_by_cpf(cpf)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )

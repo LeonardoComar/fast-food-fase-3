@@ -18,6 +18,12 @@ class ClientRepository:
         """
         return self.db_session.query(ClientDB).filter(ClientDB.id == client_id).first()
     
+    def get_client_by_cpf(self, cpf: str) -> Optional[ClientDB]:
+        """
+        Retrieve a client by CPF
+        """
+        return self.db_session.query(ClientDB).filter(ClientDB.cpf == cpf).first()
+    
     def create_client(self, client_data: dict) -> ClientDB:
         """
         Create a new client in the database

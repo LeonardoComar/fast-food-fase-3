@@ -1,19 +1,10 @@
 # fast-food-fase-3
 
 # Pendências:
-- Criar a imagem da minha aplicação no ECR
-- criar recursos no AWS Academy usando o Terraform
-    - RDS
-    - ECR
-    - EKS
-    - API Gateway
-    - Lambda 
-    - Cognito
-
-- Adaptar o código para conexão com o banco de dados gerenciavel
-- Fazer a conexão com Cognito para receber o token de acesso e configurar uma labda simples
-- Atualizar Postman para rodar as requisições do AWS
-- Criar CI/CD da aplicação
+- Configurar a validação do JWT
+- Criar rota do CPF
+- Atualizar rotas do postman
+- 
 
 # Comandos:
 ## Docker:
