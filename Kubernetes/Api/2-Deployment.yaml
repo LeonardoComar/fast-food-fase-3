@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: fastfoodapi-container
-        image: ghcr.io/LeonardoComar/fastfoodapi:latest
+        image: ghcr.io/leonardocomar/fastfoodapi:latest
         imagePullPolicy: Always 
         env:
           - name: ASPNETCORE_ENVIRONMENT
