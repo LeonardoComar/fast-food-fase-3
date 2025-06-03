@@ -20,8 +20,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entidades.Tests", "Entidade
 		{30C023A4-2A3D-46A2-914F-61146421194A} = {30C023A4-2A3D-46A2-914F-61146421194A}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.Tests", "Infra.Tests\Infra.Tests.csproj", "{4C5FE41B-E1DB-4CEA-96A5-54BC2BAA5099}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{3D198046-2540-40F4-A73D-7E0228F5A1B8}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
