@@ -1,13 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from fastapi import status
-from fastapi.testclient import TestClient
-from app.main import app
 from app.domain.client_model import ClientResponse, ClientListResponse
-
-@pytest.fixture
-def client():
-    return TestClient(app)
 
 class TestClientRoutes:
     def setup_method(self):
@@ -30,7 +24,7 @@ class TestClientRoutes:
         }
     
     @patch('app.api.client_routes.ClientService')
-    def test_get_all_clients(self, mock_service_class, client):
+    def test_get_all_clients(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
@@ -39,7 +33,7 @@ class TestClientRoutes:
         mock_service.get_all_clients.return_value = client_list
         
         # Act
-        response = client.get("/api/clients/")
+        response = authenticated_client.get("/api/clients/")
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -47,14 +41,14 @@ class TestClientRoutes:
         mock_service.get_all_clients.assert_called_once()
     
     @patch('app.api.client_routes.ClientService')
-    def test_get_client_by_id_found(self, mock_service_class, client):
+    def test_get_client_by_id_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.get_client_by_id.return_value = self.sample_client_response
         
         # Act
-        response = client.get("/api/clients/1")
+        response = authenticated_client.get("/api/clients/1")
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -62,28 +56,28 @@ class TestClientRoutes:
         mock_service.get_client_by_id.assert_called_once_with(1)
     
     @patch('app.api.client_routes.ClientService')
-    def test_get_client_by_id_not_found(self, mock_service_class, client):
+    def test_get_client_by_id_not_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.get_client_by_id.side_effect = ValueError("Client with ID 999 not found")
         
         # Act
-        response = client.get("/api/clients/999")
+        response = authenticated_client.get("/api/clients/999")
         
         # Assert
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert "not found" in response.json()["detail"]
     
     @patch('app.api.client_routes.ClientService')
-    def test_create_client(self, mock_service_class, client):
+    def test_create_client(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.create_client.return_value = self.sample_client_response
         
         # Act
-        response = client.post("/api/clients/", json=self.sample_client_create)
+        response = authenticated_client.post("/api/clients/", json=self.sample_client_create)
         
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
@@ -93,7 +87,7 @@ class TestClientRoutes:
         mock_service.create_client.assert_called_once()
         
     @patch('app.api.client_routes.ClientService')
-    def test_update_client_found(self, mock_service_class, client):
+    def test_update_client_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
@@ -106,7 +100,7 @@ class TestClientRoutes:
         mock_service.update_client.return_value = updated_client
         
         # Act
-        response = client.put("/api/clients/1", json=self.sample_client_update)
+        response = authenticated_client.put("/api/clients/1", json=self.sample_client_update)
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -114,14 +108,14 @@ class TestClientRoutes:
         mock_service.update_client.assert_called_once()
     
     @patch('app.api.client_routes.ClientService')
-    def test_update_client_not_found(self, mock_service_class, client):
+    def test_update_client_not_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.update_client.side_effect = ValueError("Client with ID 999 not found")
         
         # Act
-        response = client.put("/api/clients/999", json=self.sample_client_update)
+        response = authenticated_client.put("/api/clients/999", json=self.sample_client_update)
         
         # Assert
         assert response.status_code == status.HTTP_404_NOT_FOUND

@@ -1,13 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from fastapi import status
-from fastapi.testclient import TestClient
-from app.main import app
 from app.domain.order_model import OrderResponse, OrderListResponse, OrderStatus
-
-@pytest.fixture
-def client():
-    return TestClient(app)
 
 class TestOrderRoutes:
     def setup_method(self):
@@ -38,7 +32,7 @@ class TestOrderRoutes:
         }
     
     @patch('app.api.order_routes.OrderService')
-    def test_get_all_orders(self, mock_service_class, client):
+    def test_get_all_orders(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
@@ -47,7 +41,7 @@ class TestOrderRoutes:
         mock_service.get_all_orders.return_value = order_list
         
         # Act
-        response = client.get("/api/orders/")
+        response = authenticated_client.get("/api/orders/")
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -55,7 +49,7 @@ class TestOrderRoutes:
         mock_service.get_all_orders.assert_called_once()
     
     @patch('app.api.order_routes.OrderService')
-    def test_get_orders_by_status(self, mock_service_class, client):
+    def test_get_orders_by_status(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
@@ -64,7 +58,7 @@ class TestOrderRoutes:
         mock_service.get_orders_by_status.return_value = order_list
         
         # Act
-        response = client.get(f"/api/orders/?status={OrderStatus.RECEIVED.value}")
+        response = authenticated_client.get(f"/api/orders/?status={OrderStatus.RECEIVED.value}")
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -72,14 +66,14 @@ class TestOrderRoutes:
         mock_service.get_orders_by_status.assert_called_once()
     
     @patch('app.api.order_routes.OrderService')
-    def test_get_order_by_id_found(self, mock_service_class, client):
+    def test_get_order_by_id_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.get_order_by_id.return_value = self.sample_order_response
         
         # Act
-        response = client.get("/api/orders/1")
+        response = authenticated_client.get("/api/orders/1")
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -87,28 +81,28 @@ class TestOrderRoutes:
         mock_service.get_order_by_id.assert_called_once_with(1)
     
     @patch('app.api.order_routes.OrderService')
-    def test_get_order_by_id_not_found(self, mock_service_class, client):
+    def test_get_order_by_id_not_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.get_order_by_id.side_effect = ValueError("Order with ID 999 not found")
         
         # Act
-        response = client.get("/api/orders/999")
+        response = authenticated_client.get("/api/orders/999")
         
         # Assert
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert "not found" in response.json()["detail"]
     
     @patch('app.api.order_routes.OrderService')
-    def test_create_order(self, mock_service_class, client):
+    def test_create_order(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.create_order.return_value = self.sample_order_response
         
         # Act
-        response = client.post("/api/orders/", json=self.sample_order_create)
+        response = authenticated_client.post("/api/orders/", json=self.sample_order_create)
         
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
@@ -118,7 +112,7 @@ class TestOrderRoutes:
         mock_service.create_order.assert_called_once()
         
     @patch('app.api.order_routes.OrderService')
-    def test_update_order_status(self, mock_service_class, client):
+    def test_update_order_status(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
@@ -136,7 +130,7 @@ class TestOrderRoutes:
         mock_service.update_order_status.return_value = updated_order
         
         # Act
-        response = client.patch("/api/orders/1/status", json=self.sample_status_update)
+        response = authenticated_client.patch("/api/orders/1/status", json=self.sample_status_update)
         
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -144,14 +138,14 @@ class TestOrderRoutes:
         mock_service.update_order_status.assert_called_once()
     
     @patch('app.api.order_routes.OrderService')
-    def test_update_order_status_not_found(self, mock_service_class, client):
+    def test_update_order_status_not_found(self, mock_service_class, authenticated_client):
         # Arrange
         mock_service = MagicMock()
         mock_service_class.return_value = mock_service
         mock_service.update_order_status.side_effect = ValueError("Order with ID 999 not found")
         
         # Act
-        response = client.patch("/api/orders/999/status", json=self.sample_status_update)
+        response = authenticated_client.patch("/api/orders/999/status", json=self.sample_status_update)
         
         # Assert
         assert response.status_code == status.HTTP_404_NOT_FOUND
