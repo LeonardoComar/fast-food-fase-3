@@ -15,6 +15,6 @@ pytest --cov=app app/tests/
 
 
 - testes OK
-- token JWT
+- token JWT e autenticação
 - Criar recursos na AWS
 - Gravar video

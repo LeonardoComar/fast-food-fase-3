@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.core.mysql_connection import get_db
 from app.service.product_service import ProductService
 from app.domain.product_model import ProductResponse, ProductListResponse, ProductCreate
+from app.core.auth import get_current_user
 
 router = APIRouter(
     prefix="/products",
@@ -10,7 +11,7 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=ProductListResponse)
-async def get_all_products(db: Session = Depends(get_db)):
+async def get_all_products(db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     """
     Get all products
     """
@@ -24,7 +25,7 @@ async def get_all_products(db: Session = Depends(get_db)):
         )
 
 @router.get("/{product_id}", response_model=ProductResponse)
-async def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
+async def get_product_by_id(product_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     """
     Get a specific product by ID
     """
@@ -43,7 +44,7 @@ async def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
         )
 
 @router.post("/", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
-async def create_product(product: ProductCreate, db: Session = Depends(get_db)):
+async def create_product(product: ProductCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     """
     Create a new product
     """
@@ -57,7 +58,7 @@ async def create_product(product: ProductCreate, db: Session = Depends(get_db)):
         )
 
 @router.put("/{product_id}", response_model=ProductResponse)
-async def update_product(product_id: int, product: ProductCreate, db: Session = Depends(get_db)):
+async def update_product(product_id: int, product: ProductCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     """
     Update an existing product
     """

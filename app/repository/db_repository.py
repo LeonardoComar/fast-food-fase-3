@@ -16,6 +16,9 @@ def create_db_tables():
     
     # Criar tabelas
     create_tables()
+    
+    # Inserir dados iniciais
+    insert_initial_data()
 
 def create_database_if_not_exists():
     # URL sem o nome do banco específico
@@ -82,6 +85,57 @@ def create_tables():
     except OperationalError as e:
         print(f"Erro de conexão com o banco: {e}")
         raise
+    finally:
+        if 'engine' in locals():
+            engine.dispose()
+
+def insert_initial_data():
+    """Insere dados iniciais nas tabelas se estiverem vazias"""
+    db_url = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    
+    try:
+        engine = create_engine(db_url, echo=SQL_ECHO)
+        with engine.connect() as conn:
+            # Verificar se a tabela de produtos está vazia
+            result = conn.execute(text("SELECT COUNT(*) FROM products"))
+            if result.scalar() == 0:
+                # Inserir produtos
+                conn.execute(text("""
+                    INSERT INTO products (name, category, price, description)
+                    VALUES ('Produto 1', 'Lanche', 35.90, 'Descrição do produto 1');
+                """))
+                conn.execute(text("""
+                    INSERT INTO products (name, category, price, description)
+                    VALUES ('Produto 2', 'Bebida', 12.50, 'Descrição do produto 2');
+                """))
+                conn.execute(text("""
+                    INSERT INTO products (name, category, price, description)
+                    VALUES ('Produto 3', 'Sobremesa', 18.90, 'Descrição do produto 3');
+                """))
+                print("Produtos iniciais inseridos com sucesso!")
+            
+            # Verificar se a tabela de clientes está vazia
+            result = conn.execute(text("SELECT COUNT(*) FROM clients"))
+            if result.scalar() == 0:
+                # Inserir clientes
+                conn.execute(text("""
+                    INSERT INTO clients (name, cpf)
+                    VALUES ('Client 1', '620.546.640-65');
+                """))
+                conn.execute(text("""
+                    INSERT INTO clients (name, cpf)
+                    VALUES ('Client 2', '927.437.110-19');
+                """))
+                conn.execute(text("""
+                    INSERT INTO clients (name, cpf)
+                    VALUES ('Client 3', '495.585.060-01');
+                """))
+                print("Clientes iniciais inseridos com sucesso!")
+            
+            # Commit das transações
+            conn.commit()
+    except Exception as e:
+        print(f"Erro ao inserir dados iniciais: {e}")
     finally:
         if 'engine' in locals():
             engine.dispose()

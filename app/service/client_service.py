@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from typing import List
 from app.repository.client_repository import ClientRepository
-from app.domain.client_model import ClientResponse, ClientListResponse, ClientCreate, ClientUpdate
+from app.domain.client_model import ClientResponse, ClientListResponse, ClientCreate, ClientUpdate, ClientTokenResponse
+from app.core.jwt import create_access_token
 
 class ClientService:
     def __init__(self, db_session: Session):
@@ -25,14 +26,31 @@ class ClientService:
             raise ValueError(f"Client with ID {client_id} not found")
         return ClientResponse.model_validate(client)
     
-    def get_client_by_cpf(self, cpf: str) -> ClientResponse:
+    def get_client_by_cpf(self, cpf: str) -> ClientTokenResponse:
         """
-        Get a client by CPF
+        Get a client by CPF and generate a JWT token
         """
         client = self.repository.get_client_by_cpf(cpf)
         if not client:
             raise ValueError(f"Client with CPF {cpf} not found")
-        return ClientResponse.model_validate(client)
+        
+        # Create token data with client information
+        token_data = {
+            "sub": str(client.id),
+            "cpf": client.cpf,
+            "name": client.name,
+            "role": "client"  # Assuming default role for clients
+        }
+        
+        # Generate JWT token
+        token = create_access_token(token_data)
+        
+        # Create response with client data and token
+        client_response = ClientResponse.model_validate(client)
+        return ClientTokenResponse(
+            **client_response.model_dump(),
+            token=token
+        )
     
     def create_client(self, client_data: ClientCreate) -> ClientResponse:
         """

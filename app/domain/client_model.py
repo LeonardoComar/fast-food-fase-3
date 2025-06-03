@@ -33,3 +33,7 @@ class ClientListResponse(BaseModel):
 # Pydantic model for client name updates
 class ClientUpdate(BaseModel):
     name: str
+
+# Adicionar novo modelo para resposta com token
+class ClientTokenResponse(ClientResponse):
+    token: str
