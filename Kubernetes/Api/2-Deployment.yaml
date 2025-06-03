@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastfoodapi-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastfoodapi-pod
+  template:
+    metadata:
+      labels:
+        app: fastfoodapi-pod
+    spec:
+      containers:
+      - name: fastfoodapi-container
+        image: ghcr.io/LeonardoComar/fastfoodapi:latest
+        imagePullPolicy: Always 
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: fastfoodapi-secrets
+                key: postgres-connection-string
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: api/HealthCheck/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: api/HealthCheck/ready
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
