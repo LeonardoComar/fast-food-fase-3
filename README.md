@@ -1,16 +1,8 @@
 # fast-food-fase-3
 
-# Pendências:
-- Configurar a validação do JWT
-- Criar rota do CPF
-- Atualizar rotas do postman
-- 
-
-# Comandos:
-## Docker:
-docker-compose build
-docker-compose up -d
-docker-compose down -v
-
-## Testes
-pytest --cov=app app/tests/
+## Projetos da fase 3:
+- https://github.com/LeonardoComar/fast-food-fase-3-terraform-vpc
+- https://github.com/LeonardoComar/fast-food-fase-3-terraform-rds
+- https://github.com/LeonardoComar/fast-food-fase-3-terraform-eks
+- https://github.com/LeonardoComar/fast-food-fase-3-lambda
+- https://github.com/LeonardoComar/fast-food-fase-3
