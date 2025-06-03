@@ -60,11 +60,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/fastfoodapi:latest -f ./API/Dockerfile .
+          docker build -t ghcr.io/leonardocomar/fastfoodapi:latest -f ./API/Dockerfile .
 
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/${{ github.actor }}/fastfoodapi:latest
+          docker push ghcr.io/leonardocomar/fastfoodapi:latest
 
       - name: Make GHCR Image Public
         run: |
@@ -72,7 +72,7 @@ jobs:
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d '{"visibility": "public"}' \
-            https://api.github.com/user/packages/container/${{ github.repository }}/ghcr.io/${{ github.repository }}/fastfoodapi/versions/latest
+            https://api.github.com/user/packages/container/leonardocomar/fast-food-fase-3/versions/latest
 
   Deploy-EKS:
     runs-on: ubuntu-latest
@@ -90,13 +90,21 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
-      - name: Setup kubectl
+      - name: Set lowercase repository name
+        run: |
+          echo "REPO_NAME=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "REPO_FULL=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Deployment no EKS
+        run: aws eks update-kubeconfig --name fastfood-cluster --region us-east-1
+
+      - name: Setup kubeconfig EKS
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
 
-      - name: Setup kubeconfig EKS
-        run: aws eks update-kubeconfig --name fastfood-cluster --region us-east-1
+      - name: Verificar rollout do deploy
+        run: kubectl rollout status deployment/fastfoodapi-deployment --namespace=default
 
       - name: Deployment no EKS
         run: |
